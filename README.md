@@ -1,7 +1,7 @@
 # SwarManthan-Voice Typist Chrome Extension
 
-> 🎙️ Speak naturally — get AI-polished, tone-aware text anywhere on the web.  
-> Powered by **Chrome’s Web Speech API** + **ONNX Runtime Web (offline AI rephrasing)**.
+🎙️ Speak naturally — get AI-polished, tone-aware text anywhere on the web.  
+Powered by **Chrome’s Web Speech API** + **ONNX Runtime Web (offline AI rephrasing)**.
 
 ---
 
