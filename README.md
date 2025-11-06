@@ -1,4 +1,4 @@
-# Voice Typist Chrome Extension
+# SwarManthan-Voice Typist Chrome Extension
 
 A Chrome extension that allows you to type anywhere on the web using only your voice with tone rephrasing capabilities.
 
