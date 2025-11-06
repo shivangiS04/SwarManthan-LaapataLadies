@@ -1,193 +1,230 @@
 # SwarManthan-Voice Typist Chrome Extension
 
-A Chrome extension that allows you to type anywhere on the web using only your voice with tone rephrasing capabilities.
+> 🎙️ Speak naturally — get AI-polished, tone-aware text anywhere on the web.  
+> Powered by **Chrome’s Web Speech API** + **ONNX Runtime Web (offline AI rephrasing)**.
+
+---
 
 ## 📋 Table of Contents
 
+- [Overview](#overview)
 - [Features](#features)
+- [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [How to Use](#how-to-use)
 - [Project Structure](#project-structure)
 - [Development](#development)
 - [Troubleshooting](#troubleshooting)
+- [Privacy](#privacy)
+- [License](#license)
+
+---
+
+## 🧭 Overview
+
+**Voice Typist** is a Manifest V3 Chrome extension that enables you to type text anywhere on the web using only your **voice**, and then **rephrase it offline using AI** — all **without depending on any external API or internet connection**.
+
+It uses:
+- Chrome’s **Web Speech API** for voice transcription, and  
+- **ONNX Runtime Web + Transformers.js** to rephrase text into different tones locally (e.g. Formal, Friendly, Professional).
+
+---
 
 ## ✨ Features
 
-- **Voice-to-Text**: Type on any website using your voice
-- **Tone Rephrasing**: Rephrase text with different tones
-- **Universal Compatibility**: Works on all websites (`<all_urls>`)
-- **Modern Manifest V3**: Built using the latest Chrome extension standards
+| Feature | Description |
+|----------|--------------|
+| 🎙️ **Voice-to-Text** | Speak naturally and transcribe in real time |
+| 🧠 **AI Tone Rephrasing** | Rephrase your text into professional, friendly, or formal tones |
+| 📴 **Offline Processing** | ONNX model runs entirely in your browser (no internet required) |
+| ⚡ **Smart Insertion** | Automatically inserts transcribed or rephrased text into focused inputs |
+| 🔄 **Duplicate Prevention** | Avoids inserting text multiple times |
+| 🌐 **Universal Compatibility** | Works across all websites (`<all_urls>`) |
+| 🧩 **Manifest V3 Compliant** | Secure, efficient, and future-proof |
+
+---
+
+## 🏗️ Architecture
+
+**Core Components:**
+
+1. **Popup Interface**  
+   - `popup.html`, `popup.js`, `rephraser-onnx.js`  
+   - Handles speech recognition, rephrasing, and user interactions.
+
+2. **Content Script**  
+   - `content.js`  
+   - Injected into active web pages to insert text and show notifications.
+
+3. **ONNX Model Execution (Offline AI)**  
+   - Uses **Transformers.js** + **ONNX Runtime Web (WASM)**  
+   - Loads **FLAN-T5-small** model locally to rephrase text in various tones.
+
+**Flow:**
+```
+🎤 User Speaks
+   ↓
+Web Speech API transcribes
+   ↓
+User selects tone (Formal / Friendly / Professional)
+   ↓
+ONNX Runtime Web (FLAN-T5-small) rephrases text locally
+   ↓
+User clicks “Insert”
+   ↓
+content.js inserts text into webpage input
+```
+
+---
 
 ## 📦 Prerequisites
 
-- Google Chrome browser (version 88 or higher recommended for Manifest V3 support)
-- A working microphone for voice input
-- Basic knowledge of Chrome extension installation (developer mode)
+- ✅ Google Chrome (v88 or higher for Manifest V3)
+- 🎙️ Working microphone
+- 💻 Local file access (for unpacked extension)
+- No internet required (AI runs locally)
+
+---
 
 ## 🚀 Installation
 
-### Step 1: Enable Developer Mode in Chrome
-
-1. Open Google Chrome
-2. Navigate to `chrome://extensions/`
-   - You can also access this via: **Menu (⋮) → Extensions → Manage Extensions**
-3. Toggle **"Developer mode"** ON (located in the top-right corner)
+### Step 1: Enable Developer Mode
+1. Open Chrome and go to:
+   ```
+   chrome://extensions/
+   ```
+2. Toggle **Developer mode** (top right corner).
 
 ### Step 2: Load the Extension
-
-1. Click **"Load unpacked"** button (visible after enabling Developer mode)
-2. Navigate to and select the `Chrome_Extension` folder:
+1. Click **Load unpacked**
+2. Select the folder containing your project:
    ```
-   /Users/shivangisingh/Desktop/Chrome_Extension
+   /path/to/Voice_Typist_Extension
    ```
-3. Click **"Select"** or **"Open"**
+3. Click **Open**
 
-### Step 3: Grant Permissions
+### Step 3: Grant Microphone Permission
+When prompted, click **Allow** for microphone access.
 
-When you first load the extension:
-- Chrome may prompt you to grant microphone permissions
-- Click **"Allow"** when prompted
-- The extension will appear in your Extensions toolbar
+---
 
 ## 🎯 How to Use
 
-### Basic Voice Typing
+### 🗣️ Voice Typing
+1. Click the **Voice Typist icon** in your toolbar.
+2. Click **Start Recording** — speak clearly.
+3. Watch your transcription appear live in the popup.
+4. Click **Stop Recording** when done.
 
-1. **Open the Extension Popup**
-   - Click the Voice Typist icon in your Chrome toolbar
-   - The popup interface will open
+### ✏️ AI Tone Rephrasing
+1. After transcription, select one of the tone buttons:
+   - **Formal**
+   - **Friendly**
+   - **Professional**
+2. Wait for ONNX model inference (done locally).
+3. The rephrased text appears in the popup.
 
-2. **Start Voice Input**
-   - Click the microphone button or activate voice input
-   - Speak clearly into your microphone
-   - Your speech will be converted to text
+### 💡 Insert Text
+1. Click inside any input field, textarea, or editable box on a webpage.
+2. Click **Insert Rephrased Text** (or **Insert Text**).
+3. Your text is automatically inserted in the active input.
 
-3. **Insert Text on Web Pages**
-   - Click on any text input field on a webpage
-   - The extension will automatically insert the transcribed text
-   - Works in text boxes, forms, search bars, and content-editable areas
-
-### Tone Rephrasing
-
-1. Select text on a webpage (if applicable)
-2. Use the extension's tone options to rephrase:
-   - Professional
-   - Casual
-   - Formal
-   - Friendly
-   - And more...
+---
 
 ## 📁 Project Structure
 
 ```
-Chrome_Extension/
-├── manifest.json          # Extension configuration and permissions
-├── popup.html            # Extension popup interface (referenced)
-├── content.js            # Content script for web page interaction (referenced)
-├── content.css           # Styles for content script (referenced)
-├── icon16.png           # 16x16 extension icon (referenced)
-├── icon48.png           # 48x48 extension icon (referenced)
-├── icon128.png          # 128x128 extension icon (referenced)
-└── README.md            # This file
+Voice_Typist_Extension/
+├── manifest.json                # Chrome Extension configuration
+├── popup.html                   # Extension popup UI
+├── popup.js                     # Voice + rephrasing logic
+├── rephraser-onnx.js            # ONNX inference logic (FLAN-T5-small)
+├── content.js                   # Text insertion script
+├── popup.css                    # Popup styling
+├── content.css                  # In-page notification styles
+├── icons/
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
+└── HOW_IT_WORKS.md              # Detailed technical documentation
 ```
-
-### Current Status
-
-**Note**: The following files are referenced in `manifest.json` but need to be created:
-- `popup.html` - Extension popup UI
-- `content.js` - Main functionality script
-- `content.css` - Styling for injected elements
-- Icon files (icon16.png, icon48.png, icon128.png)
-
-## 🛠️ Development
-
-### Making Changes
-
-1. **Edit Files**: Make changes to any extension files
-2. **Reload Extension**: Go to `chrome://extensions/`
-3. Click the **refresh icon** (🔄) on the Voice Typist card to reload changes
-
-### Testing
-
-1. Test on different websites to ensure compatibility
-2. Check browser console for errors:
-   - Right-click extension icon → **"Inspect popup"** (for popup errors)
-   - Press `F12` on any webpage → **Console tab** (for content script errors)
-3. Test voice input in various scenarios:
-   - Text input fields
-   - Textareas
-   - Content-editable divs
-   - Search bars
-
-### Debugging
-
-- **Popup Debugging**: Right-click extension icon → **"Inspect popup"**
-- **Content Script Debugging**: Open DevTools (`F12`) on any webpage
-- **Extension Errors**: Check `chrome://extensions/` for error messages
-
-## 🔧 Permissions Explained
-
-The extension requests the following permissions:
-
-- **`activeTab`**: Access to the currently active tab for voice typing
-- **`storage`**: Store user preferences and settings
-- **`<all_urls>`**: Work on all websites (host permission)
-
-## ❓ Troubleshooting
-
-### Extension Won't Load
-
-- **Error: "Manifest file is missing or unreadable"**
-  - Ensure `manifest.json` is in the root folder
-  - Check for JSON syntax errors
-
-- **Error: "Could not load extension"**
-  - Verify all referenced files exist
-  - Check browser console for specific errors
-
-### Voice Not Working
-
-- **Microphone permissions denied**
-  - Go to `chrome://settings/content/microphone`
-  - Ensure microphone access is allowed
-  - Check system microphone permissions (macOS System Preferences)
-
-- **Voice input not transcribing**
-  - Check browser console for errors
-  - Verify Web Speech API is supported in your Chrome version
-  - Ensure you're on an HTTPS site (required for microphone access on some sites)
-
-### Text Not Inserting
-
-- **Content script not running**
-  - Check if the page has CSP (Content Security Policy) restrictions
-  - Verify `content.js` is properly loaded (check DevTools → Sources)
-
-## 📝 Notes
-
-- This extension uses **Manifest V3**, the latest Chrome extension standard
-- Microphone access requires HTTPS on most websites (HTTP works on localhost)
-- Some websites may block content script injection due to security policies
-
-## 🔐 Privacy
-
-- Voice data is processed locally in your browser (when using Web Speech API)
-- No data is sent to external servers (unless you implement custom voice services)
-- Review the extension's permissions before installation
-
-## 📄 License
-
-This project is available for personal and educational use.
-
-## 🆘 Support
-
-If you encounter issues:
-1. Check the [Troubleshooting](#troubleshooting) section above
-2. Review Chrome extension console errors
-3. Verify all files are present and correctly referenced
 
 ---
 
-**Happy Voice Typing! 🎤✨**
+## 🛠️ Development
 
+### Run Locally
+1. Modify source files as needed.
+2. Reload the extension in `chrome://extensions/` by pressing the refresh (🔄) icon.
+3. Test your changes on any website.
+
+### Debugging
+- **Popup:** Right-click extension icon → “Inspect popup”
+- **Content Script:** Open DevTools (F12) → Console
+- **Speech Issues:** Check microphone permissions under  
+  `chrome://settings/content/microphone`
+
+### Key Commands
+| Action | Command |
+|--------|----------|
+| Start Recording | `popup.js → startRecording()` |
+| Stop Recording | `popup.js → stopRecording()` |
+| Rephrase Text | `rephraser-onnx.js → rephraseWithONNX()` |
+| Insert Text | `chrome.tabs.sendMessage(tabId, {action: "insertText"})` |
+
+---
+
+## 🧩 Troubleshooting
+
+### ❌ Voice Not Working
+- Ensure microphone permission is granted.
+- Chrome must run over **HTTPS** for mic access.
+- Check DevTools → Console for errors.
+
+### ⚠️ Text Not Inserting
+- Click **inside** a text field before inserting.
+- Some pages may block content scripts (CSP restrictions).
+- Reload extension if `content.js` didn’t load.
+
+### 🧠 Model Loading Error
+If you see:
+```
+Error: ONNX model load failed. Check WASM binary or model folder.
+```
+→ Ensure your model files are in the correct folder:
+```
+/models/Xenova/flan-t5-small/onnx/
+```
+and that WASM files are accessible under:
+```
+/wasm/ort-wasm.wasm
+```
+
+---
+
+## 🔐 Privacy
+
+✅ 100% Offline  
+- Speech recognition handled by Chrome’s built-in **Web Speech API**  
+- Rephrasing handled by **ONNX Runtime Web** locally in browser memory  
+- No API keys, cloud models, or data uploads  
+
+---
+
+## 📜 License
+
+This project is available for **personal, educational, and open-source use**.  
+Contributions are welcome — open a Pull Request to suggest improvements.
+
+---
+
+## 💬 Author & Credits
+
+Built with ❤️ by **Shivangi Singh , Aastha Rawat and Lipika Dudeja**  
+- 🏆 Winners at SIH 2024 (Security & AI solutions) and Hackeroverflow 9.0 by NIT Durgapur
+- 🔒 Focused on AI, Cybersecurity, and AI/ML solutions.
+
+---
+
+**Happy Voice Typing — Now with AI! 🎤🤖✨**
