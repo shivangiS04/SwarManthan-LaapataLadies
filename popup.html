@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voice Typist</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎤 Voice Typist</h1>
+      <p class="subtitle">Speak to type anywhere on the web</p>
+    </header>
+
+    <div class="main-content">
+      <!-- Voice Input Section -->
+      <div class="voice-section">
+        <button id="startRecording" class="record-btn">
+          <span class="mic-icon">🎤</span>
+          <span class="btn-text">Start Recording</span>
+        </button>
+        <button id="stopRecording" class="record-btn stop-btn" style="display: none;">
+          <span class="mic-icon">⏹</span>
+          <span class="btn-text">Stop Recording</span>
+        </button>
+
+        <div id="status" class="status"></div>
+
+        <div id="transcript" class="transcript">
+          <p class="transcript-label">Your text will appear here:</p>
+          <p id="transcriptText" class="transcript-text"></p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button id="insertText" class="action-btn primary" disabled>
+          Insert Text
+        </button>
+        <button id="clearText" class="action-btn secondary">
+          Clear
+        </button>
+      </div>
+
+      <!-- Tone Rephrasing Section -->
+      <div class="tone-section">
+        <h3>Rephrase with Tone</h3>
+        <div class="tone-buttons">
+          <button class="tone-btn" data-tone="professional">Professional</button>
+          <button class="tone-btn" data-tone="casual">Casual</button>
+          <button class="tone-btn" data-tone="formal">Formal</button>
+          <button class="tone-btn" data-tone="friendly">Friendly</button>
+        </div>
+        <div id="rephrasedText" class="rephrased-text"></div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="instructions">
+        <h4>How to use:</h4>
+        <ol>
+          <li>Click on any text field on a webpage</li>
+          <li>Click "Start Recording" and speak</li>
+          <li>Click "Insert Text" to type on the page</li>
+          <li>Optionally choose a tone to rephrase</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Important: load popup.js as an ES module -->
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
