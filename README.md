@@ -100,7 +100,7 @@ content.js inserts text into webpage input
 1. Click **Load unpacked**
 2. Select the folder containing your project:
    ```
-   /path/to/Voice_Typist_Extension
+   /Users/shivangisingh/Desktop/voice-typist
    ```
 3. Click **Open**
 
